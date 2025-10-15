@@ -1,0 +1,38 @@
+[
+  {
+    "id": "h1",
+    "topic": "CADENAS DE WHATSAPP",
+    "text": "\"El sábado WhatsApp será facturado. Si tienes al menos 10 contactos enviales este mensaje. Así verán que eres un asiduo utilizador y tu logo se volverá azul y quedará gratuito. Se ha hablado de ello hoy en la prensa. WhatsApp costará 0,01 euro por mensaje. Envía este mensaje a 10 personas. Cuando lo hagas la luz se volverá azul de lo contrario Whatsapp activará la facturación\"",
+    "imageLabel": "Cadena de WhatsApp",
+    "image": "/assets/images/case-1.jpg",
+    "truth": false,
+    "seedCounts": {  }
+  },
+  {
+    "id": "h2",
+    "topic": "MEDIOS DE COMUNICACIÓN",
+    "text": "Un estudio demuestra que beber agua caliente cura resfriados",
+    "imageLabel": "Noticia ciencia",
+    "image": "/assets/images/case-2.jpg",
+    "truth": false,
+    "seedCounts": {  }
+  },
+  {
+    "id": "h3",
+    "topic": "REDES SOCIALES",
+    "text": "Científicos anuncian una nueva especie de ave en la Amazonía",
+    "imageLabel": "Noticia en Twitter",
+    "image": "/assets/images/case-3.jpg",
+    "truth": true,
+    "seedCounts": {  }
+  },
+  {
+    "id": "h4",
+    "topic": "PROMOCIONES Y SORTEOS",
+    "text": "Científicos anuncian una nueva especie de ave en la Amazonía",
+    "imageLabel": "Sorteo en RRSS",
+    "image": "/assets/images/case-4.jpg",
+    "truth": false,
+    "seedCounts": {  }
+  }
+]
