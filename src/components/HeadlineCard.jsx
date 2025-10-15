@@ -9,10 +9,10 @@ export default function HeadlineCard({ headline, onVote, storedVote }) {
     );
   }
   // use explicit image if provided, otherwise derive from id (case-N.png)
-  let imagePath = headline.image || "/assets/images/case-1.png";
+  let imagePath = headline.image || "/images/case-1.png";
   if (!headline.image && headline.id) {
     const m = headline.id.match(/(\d+)/);
-    if (m && m[1]) imagePath = `/assets/images/case-${m[1]}.png`;
+    if (m && m[1]) imagePath = `/images/case-${m[1]}.png`;
   }
 
   const [localVote, setLocalVote] = useState(null);

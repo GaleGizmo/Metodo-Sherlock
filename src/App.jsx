@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 import headlinesData from '../headlines.json';
 
 // Use a public path to the image to avoid importing the binary directly (uppercase .PNG caused import-analysis error)
-const logoPath = '/assets/images/logo_sin_fondo.PNG';
+const logoPath = '/images/logo_sin_fondo.PNG';
 
 export default function App() {
   const [headlines] = useState(headlinesData || []);
