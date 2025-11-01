@@ -1,0 +1,55 @@
+/* Header and global root */
+
+.top-bar {
+  background: var(--primary);
+  padding: 10px 14px;
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.top-bar .title {
+  margin: 0 auto;
+  display: block;
+}
+.logo-slot {
+  position: absolute;
+  right: 18px;
+  top: 36px;
+  transform: translateY(-50%);
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.logo-slot img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: block;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  border: 5px solid #fff;
+}
+.title {
+  font-weight: 700;
+  font-size: 24px;
+  color: #111;
+}
+@media (max-width: 520px) {
+  .logo-slot {
+    width: 65px;
+    height: 65px;
+    top: 25px;
+  }
+  .logo-slot img {
+    width: 65px;
+    height: 65px;
+  }
+  .title {
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,73 @@
+/* Buttons and vote area */
+
+.buttons-container {
+  width: 100%;
+  margin-top: auto;
+}
+.buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+
+  align-items: center;
+}
+.btn {
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 140ms ease, background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.btn:active {
+  transform: translateY(1px) scale(0.985);
+}
+.btn:hover {
+  filter: brightness(1.03);
+}
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+.btn-true {
+  background: var(--true);
+}
+.btn-false {
+  background: var(--false);
+}
+.btn-doubt {
+  background: var(--doubt);
+  color: #111;
+}
+.post-vote {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.your-vote {
+  font-weight: 700;
+}
+
+/* Responsive button sizing */
+@media (max-width: 480px) {
+  .buttons {
+    gap: 8px;
+  }
+  .buttons .btn {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+
+    min-width: 0;
+  }
+}
+@media (min-width: 481px) and (max-width: 600px) {
+  .buttons .btn {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    flex: 1 1 auto;
+    min-width: 90px;
+  }
+}

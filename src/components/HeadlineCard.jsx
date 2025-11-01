@@ -22,21 +22,51 @@ export default function HeadlineCard({ headline, onVote, storedVote }) {
     setLocalVote(null);
   }, [headline && headline.id]);
 
-  function handleClick(choice){
+  function handleClick(choice) {
     // optimistic disable locally so buttons respond immediately
     setLocalVote(choice);
-    try{ onVote(choice); } catch(e){}
+    try {
+      onVote(choice);
+    } catch (e) {}
   }
 
   return (
     <div className="card">
-      <img
-        className="news-image"
-        src={imagePath}
-        alt={headline.topic || "titular"}
-      />
+      <div className="image-wrapper">
+        <img
+          className="news-image"
+          src={imagePath}
+          alt={headline.topic || "titular"}
+        />
 
-      <div id="voteArea">
+        {/* overlay shown when headline has been voted (optimistic localVote OR storedVote) */}
+        {(localVote || storedVote) && (
+          <div
+            className={`result-overlay ${headline.truth ? "true" : "false"}`}
+          >
+            {headline.truth ? "VERDADERA" : "FALSA"}
+          </div>
+        )}
+      </div>
+
+      <div id="voteArea" className="buttons-container">
+        {storedVote && (
+          <div
+            className="post-vote"
+            style={{ marginTop: 12, justifyContent: "center" }}
+          >
+            <div className="your-vote">
+              Tu voto:{" "}
+              <strong>
+                {storedVote === "true"
+                  ? "VERDADERO"
+                  : storedVote === "false"
+                  ? "FALSO"
+                  : "DUDOSO"}
+              </strong>
+            </div>
+          </div>
+        )}
         <div className="buttons">
           <button
             className="btn btn-true"
@@ -60,24 +90,6 @@ export default function HeadlineCard({ headline, onVote, storedVote }) {
             DUDOSO
           </button>
         </div>
-
-        {storedVote && (
-          <div
-            className="post-vote"
-            style={{ marginTop: 12, justifyContent: "center" }}
-          >
-            <div className="your-vote">
-              Tu voto:{" "}
-              <strong>
-                {storedVote === "true"
-                  ? "VERDADERO"
-                  : storedVote === "false"
-                  ? "FALSO"
-                  : "DUDOSO"}
-              </strong>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

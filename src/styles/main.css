@@ -1,0 +1,33 @@
+@import "./header.css";
+@import "./layout.css";
+@import "./card.css";
+@import "./buttons.css";
+@import "./footer.css";
+@import "./modal.css";
+
+/* Small reset / base rules kept here */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+:root {
+  --bg: #ffffff;
+  --primary: #f1c40f;
+  --accent: #7b1fa2;
+  --true: #2e7d32;
+  --false: #c62828;
+  --doubt: #f9a825;
+  --muted: #666;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: #111;
+}
+.root-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-height: 100dvh;
+}

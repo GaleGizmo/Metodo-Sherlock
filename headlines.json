@@ -34,5 +34,59 @@
     "image": "/images/case-4.jpg",
     "truth": false,
     "seedCounts": {  }
+  },
+  {
+    "id": "h5",
+    "topic": "",
+    "text": "Regalo de 1000 libros",
+    "imageLabel": "Sorteo en RRSS",
+    "image": "/images/case-5.jpg",
+    "truth": false,
+    "seedCounts": {  }
+  },
+    {
+    "id": "h6",
+    "topic": "",
+    "text": "Brad bebe agua con almendras para no envejecer",
+    "imageLabel": "Bulo de salud",
+    "image": "/images/case-6.jpg",
+    "truth": false,
+    "seedCounts": {  }
+  },
+    {
+    "id": "h7",
+    "topic": "",
+    "text": "Si vas al colegio en chanclas tendrás mejores notas",
+    "imageLabel": "Estudio falso",
+    "image": "/images/case-7.jpg",
+    "truth": false,
+    "seedCounts": {  }
+  },
+    {
+    "id": "h8",
+    "topic": "",
+    "text": "El agua del grifo te deja sin memoria",
+    "imageLabel": "Ciencia falsa",
+    "image": "/images/case-8.jpg",
+    "truth": false,
+    "seedCounts": {  }
+  },
+    {
+    "id": "h9",
+    "topic": "",
+    "text": "Instituto regala móviles a los alumnos con mejores notas",
+    "imageLabel": "Noticia falsa",
+    "image": "/images/case-9.jpg",
+    "truth": false,
+    "seedCounts": {  }
+  },
+    {
+    "id": "h10",
+    "topic": "",
+    "text": "Zelensky con camiseta con esvástica",
+    "imageLabel": "Imagen falsa",
+    "image": "/images/case-10.jpg",
+    "truth": false,
+    "seedCounts": {  }
   }
 ]

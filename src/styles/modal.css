@@ -1,0 +1,66 @@
+/* Modal and percent rows */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 16px;
+}
+.modal[aria-hidden="false"] {
+  display: flex;
+}
+.modal {
+  display: flex;
+}
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+.percent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+.bar {
+  flex: 1;
+  height: 18px;
+  background: #eee;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.bar > i {
+  display: block;
+  height: 100%;
+}
+.label {
+  width: 110px;
+  text-align: left;
+  font-weight: 600;
+}
+.btn-next {
+  background: var(--accent);
+  color: #fff;
+  margin-top: 10px;
+}
+.result-badge {
+  display: block;
+  padding: 10px 16px;
+  width: fit-content;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 800;
+  margin: 12px auto;
+}
+.result-badge.true {
+  background: var(--true);
+}
+.result-badge.false {
+  background: var(--false);
+}

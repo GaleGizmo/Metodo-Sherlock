@@ -10,11 +10,9 @@ export default function ResultModal({ headline, storedVote, onClose, onNext }) {
     >
       <div className="modal-content">
         <h3>Resultado</h3>
-        <p>
-          La información es:
-        </p>
-        <div className={`result-badge ${headline.truth ? 'true' : 'false'}`}>
-          {headline.truth ? 'VERDADERA' : 'FALSA'}
+        <p>La información es:</p>
+        <div className={`result-badge ${headline.truth ? "true" : "false"}`}>
+          {headline.truth ? "VERDADERA" : "FALSA"}
         </div>
         <button className="btn btn-next" onClick={onNext}>
           Siguiente noticia
