@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function HeadlineCard({ headline, onVote, storedVote }) {
+export default function HeadlineCard({ headline, onVote, storedVote, resultsEnabled }) {
   if (!headline) {
     return (
       <div className="card">
@@ -39,8 +39,9 @@ export default function HeadlineCard({ headline, onVote, storedVote }) {
           alt={headline.topic || "titular"}
         />
 
-        {/* overlay shown when headline has been voted (optimistic localVote OR storedVote) */}
-        {(localVote || storedVote) && (
+        {/* overlay shown when headline has been voted (optimistic localVote OR storedVote)
+            and only visible once the user has voted all cases (resultsEnabled) */}
+        {(localVote || storedVote) && resultsEnabled && (
           <div
             className={`result-overlay ${headline.truth ? "true" : "false"}`}
           >

@@ -4,6 +4,7 @@
 @import "./buttons.css";
 @import "./footer.css";
 @import "./modal.css";
+@import "./results.css";
 
 /* Small reset / base rules kept here */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
@@ -26,8 +27,14 @@ body {
   color: #111;
 }
 .root-app {
+  background-color: white;
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
   max-height: 100dvh;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+#root {
+  background-color: lightgray;
 }
