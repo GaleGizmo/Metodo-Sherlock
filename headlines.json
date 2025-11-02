@@ -79,14 +79,6 @@
     "image": "/images/case-9.jpg",
     "truth": false,
     "seedCounts": {  }
-  },
-    {
-    "id": "h10",
-    "topic": "",
-    "text": "Zelensky con camiseta con esvástica",
-    "imageLabel": "Imagen falsa",
-    "image": "/images/case-10.jpg",
-    "truth": false,
-    "seedCounts": {  }
   }
+
 ]
