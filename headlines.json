@@ -62,21 +62,13 @@
     "truth": false,
     "seedCounts": {  }
   },
+
     {
     "id": "h8",
     "topic": "",
-    "text": "El agua del grifo te deja sin memoria",
-    "imageLabel": "Ciencia falsa",
-    "image": "/images/case-8.jpg",
-    "truth": false,
-    "seedCounts": {  }
-  },
-    {
-    "id": "h9",
-    "topic": "",
     "text": "Instituto regala móviles a los alumnos con mejores notas",
     "imageLabel": "Noticia falsa",
-    "image": "/images/case-9.jpg",
+    "image": "/images/case-8.jpg",
     "truth": false,
     "seedCounts": {  }
   }

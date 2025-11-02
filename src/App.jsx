@@ -7,12 +7,15 @@ import headlinesData from "../headlines.json";
 
 // Use a public path to the image to avoid importing the binary directly (uppercase .PNG caused import-analysis error)
 const logoPath = "/images/logo_sin_fondo.PNG";
-
+ localStorage.setItem("results_shown", false); 
 export default function App() {
+ 
   const [headlines] = useState(headlinesData || []);
   const [idx, setIdx] = useState(0);
   const h = headlines[idx];
   const [resultsOpen, setResultsOpen] = useState(false);
+  // dummy state to trigger re-render after votes are stored in localStorage
+  const [votesVersion, setVotesVersion] = useState(0);
 
   useEffect(() => {
     if (headlines.length && idx >= headlines.length) setIdx(0);
@@ -39,10 +42,8 @@ export default function App() {
   function handleVote(choice) {
     if (!h) return;
     setStored(h.id, choice);
-  }
-
-  function goNext() {
-    setIdx((idx + 1) % headlines.length);
+    // bump version so hasVotedAll() (which reads from localStorage) runs again immediately
+    setVotesVersion((v) => v + 1);
   }
 
   function hasVotedAll() {
@@ -52,6 +53,7 @@ export default function App() {
 
   function openResults() {
     if (hasVotedAll()) setResultsOpen(true);
+    localStorage.setItem("results_shown", true);
   }
 
   function closeResults() {
@@ -72,7 +74,7 @@ export default function App() {
           headline={h}
           onVote={handleVote}
           storedVote={h ? getStored(h.id) : null}
-          resultsEnabled={hasVotedAll()}
+          resultsEnabled={localStorage.getItem("results_shown")==="true"}
         />
       </main>
       <Footer
