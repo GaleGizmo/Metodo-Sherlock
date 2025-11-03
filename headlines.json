@@ -6,7 +6,7 @@
     "imageLabel": "Cadena de WhatsApp",
     "image": "/images/case-1.jpg",
     "truth": false,
-    "seedCounts": {  }
+    "seedCounts": {}
   },
   {
     "id": "h2",
@@ -15,7 +15,7 @@
     "imageLabel": "Noticia ciencia",
     "image": "/images/case-2.jpg",
     "truth": false,
-    "seedCounts": {  }
+    "seedCounts": {}
   },
   {
     "id": "h3",
@@ -24,7 +24,7 @@
     "imageLabel": "Noticia en Twitter",
     "image": "/images/case-3.jpg",
     "truth": true,
-    "seedCounts": {  }
+    "seedCounts": {}
   },
   {
     "id": "h4",
@@ -33,7 +33,7 @@
     "imageLabel": "Sorteo en RRSS",
     "image": "/images/case-4.jpg",
     "truth": false,
-    "seedCounts": {  }
+    "seedCounts": {}
   },
   {
     "id": "h5",
@@ -42,35 +42,52 @@
     "imageLabel": "Sorteo en RRSS",
     "image": "/images/case-5.jpg",
     "truth": false,
-    "seedCounts": {  }
+    "seedCounts": {}
   },
-    {
+  {
     "id": "h6",
     "topic": "",
     "text": "Brad bebe agua con almendras para no envejecer",
     "imageLabel": "Bulo de salud",
     "image": "/images/case-6.jpg",
     "truth": false,
-    "seedCounts": {  }
+    "seedCounts": {}
   },
-    {
+  {
     "id": "h7",
     "topic": "",
     "text": "Si vas al colegio en chanclas tendrás mejores notas",
     "imageLabel": "Estudio falso",
     "image": "/images/case-7.jpg",
     "truth": false,
-    "seedCounts": {  }
+    "seedCounts": {}
   },
 
-    {
+  {
     "id": "h8",
     "topic": "",
     "text": "Instituto regala móviles a los alumnos con mejores notas",
     "imageLabel": "Noticia falsa",
     "image": "/images/case-8.jpg",
     "truth": false,
-    "seedCounts": {  }
+    "seedCounts": {}
+  },
+  {
+    "id": "h9",
+    "topic": "",
+    "text": "Imágenes terribles del incendio de la Mezquita de Córdoba",
+    "imageLabel": "Noticia verdadera",
+    "image": "/images/case-9.jpg",
+    "truth": true,
+    "seedCounts": {}
+  },
+  {
+    "id": "h10",
+    "topic": "",
+    "text": "Gana más de 100 euros si compras una acción de Iberdrola",
+    "imageLabel": "Noticia falsa",
+    "image": "/images/case-10.jpg",
+    "truth": false,
+    "seedCounts": {}
   }
-
 ]

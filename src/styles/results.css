@@ -15,7 +15,7 @@
   font-weight: 700;
 }
 .result-right {
-  width: 220px;
+  width: 300px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 26px;
@@ -42,7 +42,7 @@
   border-bottom: 1px solid #665959;
   color: var(--muted);
   .era {
-    margin-left: 80px;
+    margin-left: 100px;
     margin-right: 15px;
   }
   .caso {
