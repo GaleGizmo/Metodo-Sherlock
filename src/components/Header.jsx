@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Header({ title, logo, caseNumber, resultsEnabled, onShowResults }) {
+export default function Header({ title, logo, caseNumber, resultsEnabled, onShowResults, username }) {
   return (
     <div className="top-bar">
       <div className="left-controls">
@@ -13,6 +13,9 @@ export default function Header({ title, logo, caseNumber, resultsEnabled, onShow
 
       <div className="logo-slot">
         <img src={logo} alt="logo" />
+        {username && (
+          <div className="username-badge">{username}</div>
+        )}
       </div>
     </div>
   );

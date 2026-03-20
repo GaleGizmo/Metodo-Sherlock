@@ -7,6 +7,7 @@
   justify-content: center;
   background: rgba(0, 0, 0, 0.4);
   padding: 16px;
+  z-index: 1000;
 }
 .modal[aria-hidden="false"] {
   display: flex;
@@ -63,4 +64,49 @@
 }
 .result-badge.false {
   background: var(--false);
+}
+
+/* Global average comparison block */
+.global-avg-block {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  text-align: center;
+}
+.global-avg-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+}
+.global-avg-value {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 4px 0;
+}
+.global-avg-diff {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.global-avg-diff.above {
+  color: var(--true, #2ecc71);
+}
+.global-avg-diff.below {
+  color: var(--false, #e74c3c);
+}
+
+/* Username input */
+.username-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.username-input:focus {
+  outline: none;
+  border-color: var(--accent, #333);
 }
