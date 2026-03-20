@@ -10,13 +10,40 @@
 /* Small reset / base rules kept here */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 :root {
-  --bg: #ffffff;
-  --primary: #f1c40f;
-  --accent: #7b1fa2;
-  --true: #2e7d32;
-  --false: #c62828;
-  --doubt: #f9a825;
-  --muted: #666;
+  /* Brand */
+  --bg:          #ffffff;
+  --primary:     #f1c40f;
+  --accent:      #7b1fa2;
+  --footer-bg:   #4a148c;
+
+  /* Semantic */
+  --true:        #2e7d32;
+  --false:       #c62828;
+  --doubt:       #f9a825;
+  --warning:     #e65100;
+
+  /* Tints */
+  --true-tint:   rgba(46, 125, 50, 0.12);
+  --false-tint:  rgba(198, 40, 40, 0.12);
+  --true-bg:     rgba(46, 125, 50, 0.04);
+  --false-bg:    rgba(198, 40, 40, 0.04);
+  --true-solid:  rgba(46, 125, 50, 0.9);
+  --false-solid: rgba(198, 40, 40, 0.9);
+
+  /* Neutrals */
+  --text:        #111;
+  --muted:       #666;
+  --muted-light: #999;
+  --muted-faint: #aaa;
+  --surface:     #ffffff;
+  --surface-alt: #fafafa;
+  --border:      #eee;
+  --border-mid:  #ddd;
+
+  /* Effects */
+  --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.08);
+  --shadow-logo: 0 6px 18px rgba(0, 0, 0, 0.18);
+  --overlay-bg:  rgba(0, 0, 0, 0.4);
 }
 * {
   box-sizing: border-box;
@@ -25,7 +52,7 @@ body {
   font-family: Inter, Segoe UI, Arial, sans-serif;
   margin: 0;
   background: var(--bg);
-  color: #111;
+  color: var(--text);
 }
 .root-app {
   background-color: white;

@@ -25,7 +25,7 @@ export default function Percentages({ seed, localChoice }) {
             <div className="bar">
               <i style={{ width: `${pct}%`, background: r.color }}></i>
             </div>
-            <div style={{ width: 36, textAlign: "right", fontWeight: 700 }}>
+            <div className="percent-value">
               {pct}%
             </div>
           </div>

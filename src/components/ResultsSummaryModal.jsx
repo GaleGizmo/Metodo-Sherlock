@@ -95,7 +95,7 @@ export default function ResultsSummaryModal({
           </div>
         </div>
 
-        <div style={{ marginTop: 18 }}>
+        <div className="modal-close-row">
           <button className="btn btn-next" onClick={onClose}>
             Cerrar
           </button>

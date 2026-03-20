@@ -39,7 +39,7 @@
   color: var(--accent);
 }
 .mod-empty {
-  color: #999;
+  color: var(--muted-light);
   font-size: 0.9rem;
   text-align: center;
   margin-top: 16px;
@@ -56,9 +56,9 @@
   flex-direction: column;
   gap: 10px;
   padding: 12px 14px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border);
   border-radius: 10px;
-  background: #fafafa;
+  background: var(--surface-alt);
 }
 .mod-session-card.is-active {
   border-color: var(--true);
@@ -89,24 +89,107 @@
 }
 .mod-status.inactive {
   background: #f5f5f5;
-  color: #999;
+  color: var(--muted-light);
 }
 .mod-card-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 .mod-card-actions .btn {
   font-size: 0.75rem;
   padding: 6px 12px;
   white-space: nowrap;
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .mod-btn-delete {
-  background: #fff;
-  color: #c62828;
-  border: 2px solid #c62828;
+  background: var(--surface);
+  color: var(--false);
+  border: 2px solid var(--false);
 }
 .mod-btn-delete:hover {
-  background: #c62828;
+  background: var(--false);
+  color: var(--surface);
+}
+.mod-btn-reset {
+  background: var(--surface);
+  color: var(--warning);
+  border: 2px solid var(--warning);
+}
+.mod-btn-reset:hover {
+  background: var(--warning);
+  color: var(--surface);
+}
+
+/* Ranking block */
+.mod-ranking {
+  margin-top: 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.mod-ranking-title {
+  background: var(--primary);
   color: #fff;
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.mod-ranking-list {
+  display: flex;
+  flex-direction: column;
+}
+.mod-ranking-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.mod-ranking-row:last-child {
+  border-bottom: none;
+}
+.mod-ranking-row.first  { background: #fffde7; }
+.mod-ranking-row.second { background: #f5f5f5; }
+.mod-ranking-row.third  { background: #fbe9e7; }
+.rank-pos {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--muted-faint);
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.mod-ranking-row.first  .rank-pos { color: #f9a825; }
+.mod-ranking-row.second .rank-pos { color: #757575; }
+.mod-ranking-row.third  .rank-pos { color: #bf6c4a; }
+.rank-name {
+  flex: 1;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rank-score {
+  font-size: 1.1rem;
+  font-weight: 900;
+  min-width: 48px;
+  text-align: right;
+}
+.rank-fraction {
+  font-size: 0.75rem;
+  color: var(--muted-light);
+  min-width: 32px;
+  text-align: right;
+}
+.rank-pending {
+  font-size: 0.7rem;
+  color: var(--muted-faint);
+  font-style: italic;
+  font-weight: 400;
 }

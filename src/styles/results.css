@@ -9,16 +9,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 6px 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
   border-left: 3px solid transparent;
 }
 .row-correct {
   border-left-color: var(--true);
-  background: rgba(46, 125, 50, 0.04);
+  background: var(--true-bg);
 }
 .row-wrong {
   border-left-color: var(--false);
-  background: rgba(198, 40, 40, 0.04);
+  background: var(--false-bg);
 }
 .result-left {
   flex: 0 0 24%;
@@ -41,8 +41,8 @@
   width: 100%;
   padding: 4px 10px 6px 13px;
   font-weight: 700;
-  border-bottom: 2px solid #ddd;
-  color: #999;
+  border-bottom: 2px solid var(--border-mid);
+  color: var(--muted-light);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -60,16 +60,16 @@
   width: fit-content;
 }
 .result-badge-small.true {
-  background: rgba(46, 125, 50, 0.12);
+  background: var(--true-tint);
   color: var(--true);
 }
 .result-badge-small.false {
-  background: rgba(198, 40, 40, 0.12);
+  background: var(--false-tint);
   color: var(--false);
 }
 .result-badge-small.doubt {
   background: rgba(100, 100, 100, 0.1);
-  color: #666;
+  color: var(--muted);
 }
 
 /* Score summary block */

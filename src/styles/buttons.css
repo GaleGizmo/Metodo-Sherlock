@@ -45,7 +45,7 @@
 }
 .btn-doubt {
   background: var(--doubt);
-  color: #111;
+  color: var(--text);
 }
 .post-vote {
   display: flex;

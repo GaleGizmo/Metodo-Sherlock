@@ -1,22 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
+import { NULL_UUID } from "../constants";
 
 export default function ModeratorPanel() {
   const [sessions, setSessions] = useState([]);
   const [newCode, setNewCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const [ranking, setRanking] = useState([]);
+  const [rankingSession, setRankingSession] = useState(null);
 
   useEffect(() => {
     loadSessions();
   }, []);
+
+  // Realtime subscription for ranking
+  useEffect(() => {
+    if (!rankingSession) return;
+    loadRanking(rankingSession);
+
+    const channel = supabase
+      .channel("scores-ranking")
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
+        table: "scores",
+        filter: `session_code=eq.${rankingSession}`,
+      }, () => loadRanking(rankingSession))
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
+  }, [rankingSession]);
 
   async function loadSessions() {
     const { data } = await supabase
       .from("sessions")
       .select("id, code, is_active, created_at")
       .order("created_at", { ascending: false });
-    if (data) setSessions(data);
+    if (data) {
+      setSessions(data);
+      // Auto-open ranking for active session
+      const active = data.find((s) => s.is_active);
+      if (active && !rankingSession) setRankingSession(active.code);
+    }
+  }
+
+  async function loadRanking(code) {
+    const { data } = await supabase
+      .from("scores")
+      .select("username, pct, correct_count, total")
+      .eq("session_code", code)
+      .order("pct", { ascending: false, nullsFirst: false });
+    if (data) setRanking(data);
   }
 
   async function createSession(e) {
@@ -39,9 +74,9 @@ export default function ModeratorPanel() {
   async function toggleActive(session) {
     setMessage(null);
     if (!session.is_active) {
-      // Deactivate all first, then activate this one
-      await supabase.from("sessions").update({ is_active: false }).neq("id", "00000000-0000-0000-0000-000000000000");
+      await supabase.from("sessions").update({ is_active: false }).neq("id", NULL_UUID);
       await supabase.from("sessions").update({ is_active: true }).eq("id", session.id);
+      setRankingSession(session.code);
       setMessage(`Sesión "${session.code}" activada.`);
     } else {
       await supabase.from("sessions").update({ is_active: false }).eq("id", session.id);
@@ -50,10 +85,18 @@ export default function ModeratorPanel() {
     await loadSessions();
   }
 
+  async function resetScores(session) {
+    if (!window.confirm(`¿Reiniciar puntuaciones de "${session.code}"? Los usuarios podrán volver a registrarse.`)) return;
+    await supabase.from("scores").delete().eq("session_code", session.code);
+    setMessage(`Puntuaciones de "${session.code}" reiniciadas.`);
+    if (rankingSession === session.code) loadRanking(session.code);
+  }
+
   async function deleteSession(session) {
     if (!window.confirm(`¿Borrar sesión "${session.code}"? Se perderán sus datos de partidas.`)) return;
     await supabase.from("scores").delete().eq("session_code", session.code);
     await supabase.from("sessions").delete().eq("id", session.id);
+    if (rankingSession === session.code) { setRankingSession(null); setRanking([]); }
     await loadSessions();
     setMessage(`Sesión "${session.code}" eliminada.`);
   }
@@ -97,6 +140,9 @@ export default function ModeratorPanel() {
               >
                 {s.is_active ? "DESACTIVAR" : "ACTIVAR"}
               </button>
+              <button className="btn mod-btn-reset" onClick={() => resetScores(s)}>
+                REINICIAR
+              </button>
               <button className="btn mod-btn-delete" onClick={() => deleteSession(s)}>
                 BORRAR
               </button>
@@ -104,6 +150,30 @@ export default function ModeratorPanel() {
           </div>
         ))}
       </div>
+
+      {rankingSession && (
+        <div className="mod-ranking">
+          <h3 className="mod-ranking-title">Ranking — {rankingSession}</h3>
+          {ranking.length === 0 ? (
+            <p className="mod-empty">Sin participantes aún.</p>
+          ) : (
+            <div className="mod-ranking-list">
+              {ranking.map((r, i) => (
+                <div key={r.username} className={`mod-ranking-row ${i === 0 ? "first" : i === 1 ? "second" : i === 2 ? "third" : ""}`}>
+                  <span className="rank-pos">{i + 1}</span>
+                  <span className="rank-name">{r.username}</span>
+                  <span className="rank-score">
+                    {r.pct !== null ? `${r.pct}%` : <span className="rank-pending">en curso</span>}
+                  </span>
+                  {r.pct !== null && (
+                    <span className="rank-fraction">{r.correct_count}/{r.total}</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

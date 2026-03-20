@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
+import { MAX_USERNAME_LENGTH, MAX_CODE_LENGTH, PG_UNIQUE_VIOLATION } from "../constants";
 
 export default function UsernameModal({ onStart }) {
   const [name, setName] = useState("");
@@ -57,7 +58,7 @@ export default function UsernameModal({ onStart }) {
 
     if (insertError) {
       // Unique constraint violation means someone registered the name just now
-      if (insertError.code === "23505") {
+      if (insertError.code === PG_UNIQUE_VIOLATION) {
         setError("Ese nombre ya está en uso en esta sesión.");
       } else {
         setError("Error al conectar. Inténtalo de nuevo.");
@@ -72,23 +73,24 @@ export default function UsernameModal({ onStart }) {
     <div className="modal">
       <div className="modal-content">
         <h3>MÉTODO SHERLOCK</h3>
-        <p style={{ marginBottom: 16 }}>Introduce estos datos para empezar</p>
+        <p className="modal-intro">Introduce estos datos para empezar</p>
         <form onSubmit={handleSubmit}>
           <label className="input-label">Tu nombre</label>
           <input
             className="username-input"
             type="text"
-            maxLength={40}
+            maxLength={MAX_USERNAME_LENGTH}
             placeholder="Nombre..."
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
           />
-          <label className="input-label" style={{ marginTop: 12 }}>Código de sesión</label>
+          <div className="input-helper">máx. 20 caracteres</div>
+          <label className="input-label input-label-mt">Código de sesión</label>
           <input
             className="username-input"
             type="text"
-            maxLength={20}
+            maxLength={MAX_CODE_LENGTH}
             placeholder="Ej: TALLER2026"
             value={sessionCode}
             onChange={(e) => { setSessionCode(e.target.value); setError(null); }}
@@ -97,10 +99,9 @@ export default function UsernameModal({ onStart }) {
             <div className="session-error">{error}</div>
           )}
           <button
-            className="btn btn-next"
+            className="btn btn-next btn-block"
             type="submit"
             disabled={!name.trim() || !sessionCode.trim() || loading}
-            style={{ marginTop: 16, width: "100%" }}
           >
             {loading ? "COMPROBANDO..." : "EMPEZAR"}
           </button>
