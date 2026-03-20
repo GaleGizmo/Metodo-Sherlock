@@ -1,5 +1,25 @@
 import React from "react";
 
+// Pure helpers — module-level to avoid recreation on every render
+const VOTE_LABELS = { true: "VERDADERA", false: "FALSA", doubt: "DUDOSA" };
+function mapVoteLabel(v) {
+  return v ? (VOTE_LABELS[v] ?? v.toString().toUpperCase()) : "—";
+}
+
+function AvgBlock({ label, avg, pct, comparison }) {
+  return (
+    <div className="avg-block">
+      <div className="avg-label">{label}</div>
+      <div className="avg-value">{avg != null ? `${avg}%` : "—"}</div>
+      {avg != null && (
+        <div className={`avg-diff ${pct >= avg ? "above" : "below"}`}>
+          {pct >= avg ? `+${pct - avg}` : `${pct - avg}`} vs {comparison}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ResultsSummaryModal({
   headlines = [],
   getStored,
@@ -9,7 +29,7 @@ export default function ResultsSummaryModal({
   globalAvg,
   onClose,
 }) {
-  if (!headlines || !headlines.length) return null;
+  if (!headlines.length) return null;
 
   const rows = headlines.map((h) => {
     const vote = getStored(h.id);
@@ -22,14 +42,6 @@ export default function ResultsSummaryModal({
   const correctCount = rows.filter((r) => r.correct).length;
   const total = rows.length;
   const pct = total ? Math.round((correctCount / total) * 100) : 0;
-
-  const mapVoteLabel = (v) => {
-    if (!v) return "—";
-    if (v === "true") return "VERDADERA";
-    if (v === "false") return "FALSA";
-    if (v === "doubt") return "DUDOSA";
-    return v.toString().toUpperCase();
-  };
 
   return (
     <div
@@ -70,29 +82,19 @@ export default function ResultsSummaryModal({
         </div>
 
         <div className="avg-comparison">
-          <div className="avg-block">
-            <div className="avg-label">Esta sesión{sessionCode ? ` (${sessionCode})` : ""}</div>
-            <div className="avg-value">
-              {sessionAvg !== null && sessionAvg !== undefined ? `${sessionAvg}%` : "—"}
-            </div>
-            {sessionAvg !== null && sessionAvg !== undefined && (
-              <div className={`avg-diff ${pct >= sessionAvg ? "above" : "below"}`}>
-                {pct >= sessionAvg ? `+${pct - sessionAvg}` : `${pct - sessionAvg}`} vs sesión
-              </div>
-            )}
-          </div>
+          <AvgBlock
+            label={`Esta sesión${sessionCode ? ` (${sessionCode})` : ""}`}
+            avg={sessionAvg}
+            pct={pct}
+            comparison="sesión"
+          />
           <div className="avg-divider" />
-          <div className="avg-block">
-            <div className="avg-label">Media global</div>
-            <div className="avg-value">
-              {globalAvg !== null && globalAvg !== undefined ? `${globalAvg}%` : "—"}
-            </div>
-            {globalAvg !== null && globalAvg !== undefined && (
-              <div className={`avg-diff ${pct >= globalAvg ? "above" : "below"}`}>
-                {pct >= globalAvg ? `+${pct - globalAvg}` : `${pct - globalAvg}`} vs global
-              </div>
-            )}
-          </div>
+          <AvgBlock
+            label="Media global"
+            avg={globalAvg}
+            pct={pct}
+            comparison="global"
+          />
         </div>
 
         <div className="modal-close-row">

@@ -1,7 +1,40 @@
+/* Confirm dialog */
+.mod-confirm-backdrop {
+  z-index: 1100;
+}
+.mod-confirm-box {
+  max-width: 360px;
+  text-align: left;
+}
+.mod-confirm-message {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.mod-confirm-detail {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 20px;
+  line-height: 1.45;
+}
+.mod-confirm-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.mod-confirm-cancel {
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border-mid);
+}
+.mod-confirm-cancel:hover {
+  background: var(--surface-alt);
+}
+
 /* Moderator panel */
 .mod-panel {
   max-width: 640px;
-  margin: 24px auto;
+  margin: 0 auto;
   padding: 16px;
   font-family: Inter, sans-serif;
   box-sizing: border-box;
@@ -102,6 +135,23 @@
   white-space: nowrap;
   flex: 1 1 auto;
   min-width: 0;
+}
+.mod-btn-results {
+  background: var(--surface);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+}
+.mod-btn-results:hover {
+  background: var(--accent);
+  color: var(--surface);
+}
+.mod-btn-results-on {
+  background: var(--accent);
+  color: var(--surface);
+  border: 2px solid var(--accent);
+}
+.mod-btn-results-on:hover {
+  filter: brightness(1.12);
 }
 .mod-btn-delete {
   background: var(--surface);

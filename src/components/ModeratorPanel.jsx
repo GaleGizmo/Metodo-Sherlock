@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { NULL_UUID } from "../constants";
+import ConfirmModal from "./ConfirmModal";
 
 export default function ModeratorPanel() {
   const [sessions, setSessions] = useState([]);
@@ -9,6 +10,7 @@ export default function ModeratorPanel() {
   const [message, setMessage] = useState(null);
   const [ranking, setRanking] = useState([]);
   const [rankingSession, setRankingSession] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState(null); // { message, detail, confirmLabel, confirmClass, onConfirm }
 
   useEffect(() => {
     loadSessions();
@@ -35,7 +37,7 @@ export default function ModeratorPanel() {
   async function loadSessions() {
     const { data } = await supabase
       .from("sessions")
-      .select("id, code, is_active, created_at")
+      .select("id, code, is_active, results_enabled, created_at")
       .order("created_at", { ascending: false });
     if (data) {
       setSessions(data);
@@ -71,6 +73,13 @@ export default function ModeratorPanel() {
     }
   }
 
+  async function toggleResults(session) {
+    const newValue = !session.results_enabled;
+    await supabase.from("sessions").update({ results_enabled: newValue }).eq("id", session.id);
+    setMessage(`Resultados ${newValue ? "activados" : "desactivados"} para "${session.code}".`);
+    await loadSessions();
+  }
+
   async function toggleActive(session) {
     setMessage(null);
     if (!session.is_active) {
@@ -85,23 +94,40 @@ export default function ModeratorPanel() {
     await loadSessions();
   }
 
-  async function resetScores(session) {
-    if (!window.confirm(`¿Reiniciar puntuaciones de "${session.code}"? Los usuarios podrán volver a registrarse.`)) return;
-    await supabase.from("scores").delete().eq("session_code", session.code);
-    setMessage(`Puntuaciones de "${session.code}" reiniciadas.`);
-    if (rankingSession === session.code) loadRanking(session.code);
+  function resetScores(session) {
+    setConfirmDialog({
+      message: `¿Reiniciar puntuaciones de "${session.code}"?`,
+      detail: "Los usuarios podrán volver a registrarse. Esta acción no se puede deshacer.",
+      confirmLabel: "REINICIAR",
+      confirmClass: "mod-btn-reset",
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        await supabase.from("scores").delete().eq("session_code", session.code);
+        setMessage(`Puntuaciones de "${session.code}" reiniciadas.`);
+        if (rankingSession === session.code) loadRanking(session.code);
+      },
+    });
   }
 
-  async function deleteSession(session) {
-    if (!window.confirm(`¿Borrar sesión "${session.code}"? Se perderán sus datos de partidas.`)) return;
-    await supabase.from("scores").delete().eq("session_code", session.code);
-    await supabase.from("sessions").delete().eq("id", session.id);
-    if (rankingSession === session.code) { setRankingSession(null); setRanking([]); }
-    await loadSessions();
-    setMessage(`Sesión "${session.code}" eliminada.`);
+  function deleteSession(session) {
+    setConfirmDialog({
+      message: `¿Borrar sesión "${session.code}"?`,
+      detail: "Se eliminarán todos los datos de partidas. Esta acción no se puede deshacer.",
+      confirmLabel: "BORRAR",
+      confirmClass: "mod-btn-delete",
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        await supabase.from("scores").delete().eq("session_code", session.code);
+        await supabase.from("sessions").delete().eq("id", session.id);
+        if (rankingSession === session.code) { setRankingSession(null); setRanking([]); }
+        await loadSessions();
+        setMessage(`Sesión "${session.code}" eliminada.`);
+      },
+    });
   }
 
   return (
+    <>
     <div className="mod-panel">
       <h2>Panel del moderador</h2>
 
@@ -134,6 +160,12 @@ export default function ModeratorPanel() {
               </span>
             </div>
             <div className="mod-card-actions">
+              <button
+                className={`btn ${s.results_enabled ? "mod-btn-results-on" : "mod-btn-results"}`}
+                onClick={() => toggleResults(s)}
+              >
+                {s.results_enabled ? "OCULTAR RESULTADOS" : "MOSTRAR RESULTADOS"}
+              </button>
               <button
                 className={`btn ${s.is_active ? "btn-false" : "btn-true"}`}
                 onClick={() => toggleActive(s)}
@@ -175,5 +207,17 @@ export default function ModeratorPanel() {
         </div>
       )}
     </div>
+
+      {confirmDialog && (
+        <ConfirmModal
+          message={confirmDialog.message}
+          detail={confirmDialog.detail}
+          confirmLabel={confirmDialog.confirmLabel}
+          confirmClass={confirmDialog.confirmClass}
+          onConfirm={confirmDialog.onConfirm}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
+    </>
   );
 }

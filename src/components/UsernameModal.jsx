@@ -17,56 +17,55 @@ export default function UsernameModal({ onStart }) {
     setLoading(true);
     setError(null);
 
-    const { data, error: dbError } = await supabase
-      .from("sessions")
-      .select("code, is_active")
-      .eq("code", trimmedCode)
-      .single();
+    try {
+      const { data, error: dbError } = await supabase
+        .from("sessions")
+        .select("code, is_active")
+        .eq("code", trimmedCode)
+        .single();
 
-    if (dbError || !data) {
-      setLoading(false);
-      setError("Código de sesión no encontrado.");
-      return;
-    }
-    if (!data.is_active) {
-      setLoading(false);
-      setError("Esta sesión no está activa actualmente.");
-      return;
-    }
-
-    // Check for duplicate username in this session
-    const { data: existing } = await supabase
-      .from("scores")
-      .select("username")
-      .eq("session_code", trimmedCode)
-      .eq("username", trimmedName)
-      .maybeSingle();
-
-    if (existing) {
-      setLoading(false);
-      setError("Ese nombre ya está en uso en esta sesión.");
-      return;
-    }
-
-    // Reserve the username slot immediately
-    const { error: insertError } = await supabase.from("scores").insert({
-      username: trimmedName,
-      session_code: trimmedCode,
-    });
-
-    setLoading(false);
-
-    if (insertError) {
-      // Unique constraint violation means someone registered the name just now
-      if (insertError.code === PG_UNIQUE_VIOLATION) {
-        setError("Ese nombre ya está en uso en esta sesión.");
-      } else {
-        setError("Error al conectar. Inténtalo de nuevo.");
+      if (dbError || !data) {
+        setError("Código de sesión no encontrado.");
+        return;
       }
-      return;
-    }
+      if (!data.is_active) {
+        setError("Esta sesión no está activa actualmente.");
+        return;
+      }
 
-    onStart(trimmedName, trimmedCode);
+      // Check for duplicate username in this session
+      const { data: existing } = await supabase
+        .from("scores")
+        .select("username")
+        .eq("session_code", trimmedCode)
+        .eq("username", trimmedName)
+        .maybeSingle();
+
+      if (existing) {
+        setError("Ese nombre ya está en uso en esta sesión.");
+        return;
+      }
+
+      // Reserve the username slot immediately
+      const { error: insertError } = await supabase.from("scores").insert({
+        username: trimmedName,
+        session_code: trimmedCode,
+      });
+
+      if (insertError) {
+        // Unique constraint violation means someone registered the name just now
+        setError(
+          insertError.code === PG_UNIQUE_VIOLATION
+            ? "Ese nombre ya está en uso en esta sesión."
+            : "Error al conectar. Inténtalo de nuevo."
+        );
+        return;
+      }
+
+      onStart(trimmedName, trimmedCode);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -85,7 +84,7 @@ export default function UsernameModal({ onStart }) {
             onChange={(e) => setName(e.target.value)}
             autoFocus
           />
-          <div className="input-helper">máx. 20 caracteres</div>
+          <div className="input-helper">máx. {MAX_USERNAME_LENGTH} caracteres</div>
           <label className="input-label input-label-mt">Código de sesión</label>
           <input
             className="username-input"

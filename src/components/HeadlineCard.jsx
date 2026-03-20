@@ -1,18 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+
+// Pure function — module-level to avoid recreation on every render
+function getImagePath(headline) {
+  if (headline.image) return headline.image;
+  const m = headline.id?.match(/(\d+)/);
+  return m ? `/images/case-${m[1]}.png` : "/images/case-1.png";
+}
 
 export default function HeadlineCard({ headline, onVote, storedVote, resultsEnabled }) {
   const [localVote, setLocalVote] = useState(null);
 
+  // headline?.id is the correct dep — avoids boolean expression in dep array
   useEffect(() => {
     setLocalVote(null);
-  }, [headline && headline.id]);
+  }, [headline?.id]);
 
-  function handleClick(choice) {
+  const handleClick = useCallback((choice) => {
     setLocalVote(choice);
     try {
       onVote(choice);
-    } catch (e) {}
-  }
+    } catch {}
+  }, [onVote]);
 
   if (!headline) {
     return (
@@ -22,30 +30,22 @@ export default function HeadlineCard({ headline, onVote, storedVote, resultsEnab
     );
   }
 
-  // use explicit image if provided, otherwise derive from id (case-N.png)
-  let imagePath = headline.image || "/images/case-1.png";
-  if (!headline.image && headline.id) {
-    const m = headline.id.match(/(\d+)/);
-    if (m && m[1]) imagePath = `/images/case-${m[1]}.png`;
-  }
-
   const currentVote = localVote || storedVote;
+  const isVoted = !!(localVote || storedVote);
 
   return (
     <div className="card">
       <div className="image-wrapper">
         <img
           className="news-image"
-          src={imagePath}
-          alt={headline.topic || "titular"}
+          src={getImagePath(headline)}
+          alt={headline.topic ?? "titular"}
         />
 
         {/* overlay shown when headline has been voted (optimistic localVote OR storedVote)
-            and only visible once the user has voted all cases (resultsEnabled) */}
-        {(localVote || storedVote) && resultsEnabled && (
-          <div
-            className={`result-overlay ${headline.truth ? "true" : "false"}`}
-          >
+            and only visible once the moderator has enabled results (resultsEnabled) */}
+        {isVoted && resultsEnabled && (
+          <div className={`result-overlay ${headline.truth ? "true" : "false"}`}>
             {headline.truth ? "VERDADERA" : "FALSA"}
           </div>
         )}
@@ -56,24 +56,24 @@ export default function HeadlineCard({ headline, onVote, storedVote, resultsEnab
           <button
             className={`btn btn-true${currentVote === "true" ? " btn-voted" : currentVote ? " btn-unvoted" : ""}`}
             onClick={() => handleClick("true")}
-            disabled={!!storedVote || !!localVote}
+            disabled={isVoted}
           >
             VERDADERO
           </button>
           <button
             className={`btn btn-false${currentVote === "false" ? " btn-voted" : currentVote ? " btn-unvoted" : ""}`}
             onClick={() => handleClick("false")}
-            disabled={!!storedVote || !!localVote}
+            disabled={isVoted}
           >
             FALSO
           </button>
-          <button
+          {/* <button
             className={`btn btn-doubt${currentVote === "doubt" ? " btn-voted" : currentVote ? " btn-unvoted" : ""}`}
             onClick={() => handleClick("doubt")}
-            disabled={!!storedVote || !!localVote}
+            disabled={isVoted}
           >
             DUDOSO
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
