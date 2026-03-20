@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function Footer({ onPrev, onNext, progressText }) {
+export default function Footer({ onPrev, onNext, progressText, username, sessionCode }) {
   return (
     <div className="bottom-bar footer">
-      <div className="center-controls">
+      <div className="footer-nav">
         <button className="btn btn-nav" onClick={onPrev}>
           Anterior
         </button>
@@ -12,9 +12,12 @@ export default function Footer({ onPrev, onNext, progressText }) {
           Siguiente
         </button>
       </div>
-      {/* <div className="instructions">
-        Pulsa una opción para valorar la información
-      </div> */}
+      {(username || sessionCode) && (
+        <div className="footer-user">
+          {username && <span className="footer-username">{username}</span>}
+          {sessionCode && <span className="footer-session">{sessionCode}</span>}
+        </div>
+      )}
     </div>
   );
 }

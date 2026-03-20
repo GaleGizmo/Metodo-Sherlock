@@ -4,6 +4,8 @@ export default function ResultsSummaryModal({
   headlines = [],
   getStored,
   username,
+  sessionCode,
+  sessionAvg,
   globalAvg,
   onClose,
 }) {
@@ -67,24 +69,30 @@ export default function ResultsSummaryModal({
           style={{ marginTop: 14, fontWeight: 700 }}
         >{`${username ? username.toUpperCase() + ": " : ""}HAS ACERTADO ${correctCount}/${total} (${pct}%)`}</div>
 
-        <div className="global-avg-block">
-          {globalAvg !== null && globalAvg !== undefined ? (
-            <>
-              <div className="global-avg-label">Media global de la sesión</div>
-              <div className="global-avg-value">{globalAvg}%</div>
-              <div
-                className={`global-avg-diff ${pct >= globalAvg ? "above" : "below"}`}
-              >
-                {pct >= globalAvg
-                  ? `+${pct - globalAvg} puntos sobre la media`
-                  : `${pct - globalAvg} puntos bajo la media`}
-              </div>
-            </>
-          ) : (
-            <div className="global-avg-label" style={{ opacity: 0.5 }}>
-              Calculando media global...
+        <div className="avg-comparison">
+          <div className="avg-block">
+            <div className="avg-label">Esta sesión{sessionCode ? ` (${sessionCode})` : ""}</div>
+            <div className="avg-value">
+              {sessionAvg !== null && sessionAvg !== undefined ? `${sessionAvg}%` : "—"}
             </div>
-          )}
+            {sessionAvg !== null && sessionAvg !== undefined && (
+              <div className={`avg-diff ${pct >= sessionAvg ? "above" : "below"}`}>
+                {pct >= sessionAvg ? `+${pct - sessionAvg}` : `${pct - sessionAvg}`} vs sesión
+              </div>
+            )}
+          </div>
+          <div className="avg-divider" />
+          <div className="avg-block">
+            <div className="avg-label">Media global</div>
+            <div className="avg-value">
+              {globalAvg !== null && globalAvg !== undefined ? `${globalAvg}%` : "—"}
+            </div>
+            {globalAvg !== null && globalAvg !== undefined && (
+              <div className={`avg-diff ${pct >= globalAvg ? "above" : "below"}`}>
+                {pct >= globalAvg ? `+${pct - globalAvg}` : `${pct - globalAvg}`} vs global
+              </div>
+            )}
+          </div>
         </div>
 
         <div style={{ marginTop: 18 }}>

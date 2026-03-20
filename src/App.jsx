@@ -3,26 +3,39 @@ import Header from "./components/Header";
 import HeadlineCard from "./components/HeadlineCard";
 import ResultsSummaryModal from "./components/ResultsSummaryModal";
 import UsernameModal from "./components/UsernameModal";
+import ModeratorPanel from "./components/ModeratorPanel";
 import Footer from "./components/Footer";
 import headlinesData from "../headlines.json";
 import { supabase } from "./supabaseClient";
 
-// Use a public path to the image to avoid importing the binary directly (uppercase .PNG caused import-analysis error)
 const logoPath = "/images/logo_sin_fondo.PNG";
+const MOD_PIN = import.meta.env.VITE_MOD_PIN;
+
+function isModerator() {
+  const params = new URLSearchParams(window.location.search);
+  return MOD_PIN && params.get("mod") === MOD_PIN;
+}
 
 export default function App() {
-  const [username, setUsername] = useState(null);
+  if (isModerator()) return <ModeratorPanel />;
+  return <GameApp />;
+}
+
+function GameApp() {
+  const [username, setUsername] = useState(() => localStorage.getItem("ms_username") || null);
+  const [sessionCode, setSessionCode] = useState(() => localStorage.getItem("ms_session_code") || null);
   const [headlines] = useState(headlinesData || []);
   const [idx, setIdx] = useState(0);
   const h = headlines[idx];
   const [resultsOpen, setResultsOpen] = useState(false);
+  const [sessionAvg, setSessionAvg] = useState(null);
   const [globalAvg, setGlobalAvg] = useState(null);
-  // dummy state to trigger re-render after votes are stored in localStorage
+  // dummy state to trigger re-render after votes are stored in sessionStorage
   const [votesVersion, setVotesVersion] = useState(0);
 
   useEffect(() => {
     // Clear results_shown on mount for a fresh session
-    sessionStorage.setItem("results_shown", false);
+    localStorage.setItem("results_shown", false);
   }, []);
 
   useEffect(() => {
@@ -32,20 +45,34 @@ export default function App() {
   async function submitScoreToSupabase(correctCount, total) {
     const pct = total ? Math.round((correctCount / total) * 100) : 0;
     try {
-      await supabase.from("game_sessions").insert({
-        username,
-        correct_count: correctCount,
-        total,
-        pct,
-      });
-      const { data } = await supabase
-        .from("game_sessions")
-        .select("pct");
-      if (data && data.length) {
-        const avg = Math.round(
-          data.reduce((acc, row) => acc + row.pct, 0) / data.length
-        );
-        setGlobalAvg(avg);
+      const { error: updateError } = await supabase
+        .from("scores")
+        .update({ correct_count: correctCount, total, pct })
+        .eq("username", username)
+        .eq("session_code", sessionCode);
+
+      if (updateError) {
+        console.error("Error updating score:", updateError);
+        return;
+      }
+
+      const [{ data: sessionData, error: sErr }, { data: globalData, error: gErr }] = await Promise.all([
+        supabase.from("scores").select("pct").eq("session_code", sessionCode).not("pct", "is", null),
+        supabase.from("scores").select("pct").not("pct", "is", null),
+      ]);
+
+      if (sErr) console.error("Error fetching session avg:", sErr);
+      if (gErr) console.error("Error fetching global avg:", gErr);
+
+      if (sessionData && sessionData.length) {
+        setSessionAvg(Math.round(
+          sessionData.reduce((acc, row) => acc + row.pct, 0) / sessionData.length
+        ));
+      }
+      if (globalData && globalData.length) {
+        setGlobalAvg(Math.round(
+          globalData.reduce((acc, row) => acc + row.pct, 0) / globalData.length
+        ));
       }
     } catch (e) {
       console.error("Supabase error:", e);
@@ -58,7 +85,7 @@ export default function App() {
 
   function getStored(id) {
     try {
-      return sessionStorage.getItem(storageKey(id));
+      return localStorage.getItem(storageKey(id));
     } catch (e) {
       return null;
     }
@@ -66,7 +93,7 @@ export default function App() {
 
   function setStored(id, v) {
     try {
-      sessionStorage.setItem(storageKey(id), v);
+      localStorage.setItem(storageKey(id), v);
     } catch (e) {}
   }
 
@@ -95,7 +122,7 @@ export default function App() {
     const correctCount = rows.filter(Boolean).length;
     submitScoreToSupabase(correctCount, headlines.length);
     setResultsOpen(true);
-    sessionStorage.setItem("results_shown", true);
+    localStorage.setItem("results_shown", true);
   }
 
   function closeResults() {
@@ -104,7 +131,12 @@ export default function App() {
 
   return (
     <div className="root-app">
-      {!username && <UsernameModal onStart={setUsername} />}
+      {!username && <UsernameModal onStart={(name, code) => {
+        setUsername(name);
+        setSessionCode(code);
+        localStorage.setItem("ms_username", name);
+        localStorage.setItem("ms_session_code", code);
+      }} />}
       <Header
         caseNumber={h ? `CASO ${idx + 1}` : "CASO"}
         title={h ? `${h.topic}` : ""}
@@ -112,13 +144,14 @@ export default function App() {
         resultsEnabled={hasVotedAll()}
         onShowResults={openResults}
         username={username}
+        sessionCode={sessionCode}
       />
       <main className="container">
         <HeadlineCard
           headline={h}
           onVote={handleVote}
           storedVote={h ? getStored(h.id) : null}
-          resultsEnabled={sessionStorage.getItem("results_shown")==="true"}
+          resultsEnabled={localStorage.getItem("results_shown")==="true"}
         />
       </main>
       <Footer
@@ -127,6 +160,8 @@ export default function App() {
         progressText={
           headlines.length ? `${idx + 1} / ${headlines.length}` : "0 / 0"
         }
+        username={username}
+        sessionCode={sessionCode}
       />
 
       {resultsOpen && (
@@ -134,6 +169,8 @@ export default function App() {
           headlines={headlines}
           getStored={getStored}
           username={username}
+          sessionCode={sessionCode}
+          sessionAvg={sessionAvg}
           globalAvg={globalAvg}
           onClose={closeResults}
         />
