@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 // Pure function — module-level to avoid recreation on every render
 function getImagePath(headline) {
@@ -7,8 +7,22 @@ function getImagePath(headline) {
   return m ? `/images/case-${m[1]}.png` : "/images/case-1.png";
 }
 
-export default function HeadlineCard({ headline, onVote, storedVote, resultsEnabled }) {
+export default function HeadlineCard({ headline, onVote, storedVote, resultsEnabled, onNext, onPrev }) {
   const [localVote, setLocalVote] = useState(null);
+  const touchStartX = useRef(null);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 50) return;
+    if (delta < 0) onNext?.();
+    else           onPrev?.();
+  }, [onNext, onPrev]);
 
   // headline?.id is the correct dep — avoids boolean expression in dep array
   useEffect(() => {
@@ -34,7 +48,7 @@ export default function HeadlineCard({ headline, onVote, storedVote, resultsEnab
   const isVoted = !!(localVote || storedVote);
 
   return (
-    <div className="card">
+    <div className="card" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <div className="image-wrapper">
         <img
           className="news-image"

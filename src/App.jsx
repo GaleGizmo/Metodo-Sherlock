@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Header from "./components/Header";
 import HeadlineCard from "./components/HeadlineCard";
 import ResultsSummaryModal from "./components/ResultsSummaryModal";
@@ -135,21 +135,6 @@ function GameApp() {
     localStorage.setItem("ms_session_code", code);
   }, []);
 
-  const touchStartX = useRef(null);
-
-  const handleTouchStart = useCallback((e) => {
-    touchStartX.current = e.touches[0].clientX;
-  }, []);
-
-  const handleTouchEnd = useCallback((e) => {
-    if (touchStartX.current === null) return;
-    const delta = e.changedTouches[0].clientX - touchStartX.current;
-    touchStartX.current = null;
-    if (Math.abs(delta) < 50) return;
-    if (delta < 0) setIdx((i) => (i + 1) % headlines.length);          // swipe left  → next
-    else           setIdx((i) => (i - 1 + headlines.length) % headlines.length); // swipe right → prev
-  }, []);
-
   const openResults = useCallback(() => {
     if (!hasVotedAll || !resultsEnabled) return;
     setResultsOpen(true);
@@ -167,12 +152,14 @@ function GameApp() {
         username={username}
         sessionCode={sessionCode}
       />
-      <main className="container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <main className="container">
         <HeadlineCard
           headline={h}
           onVote={handleVote}
           storedVote={h ? getStored(h.id) : null}
           resultsEnabled={resultsEnabled}
+          onNext={() => setIdx((i) => (i + 1) % headlines.length)}
+          onPrev={() => setIdx((i) => (i - 1 + headlines.length) % headlines.length)}
         />
       </main>
       <Footer
