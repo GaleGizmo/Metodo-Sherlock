@@ -59,8 +59,14 @@
 
 @media (max-width: 520px) {
   .btn-nav {
-    padding: 10px 14px;
+    padding: 8px 10px;
     font-weight: 700;
+  }
+  .bottom-bar {
+   padding: 6px 10px;
+  }
+  .footer-nav {
+    gap: 4px;
   }
   .footer-username,
   .footer-session {

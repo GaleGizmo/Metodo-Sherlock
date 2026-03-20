@@ -1,4 +1,4 @@
-/* Modal and percent rows */
+/* Modal */
 .modal {
   position: fixed;
   inset: 0;
@@ -25,28 +25,6 @@
   max-height: 90dvh;
   overflow-y: auto;
   overscroll-behavior: contain;
-}
-.percent-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 10px 0;
-}
-.bar {
-  flex: 1;
-  height: 18px;
-  background: var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.bar > i {
-  display: block;
-  height: 100%;
-}
-.label {
-  width: 110px;
-  text-align: left;
-  font-weight: 600;
 }
 .btn-next {
   background: var(--accent);
@@ -162,9 +140,4 @@
 }
 .modal-close-row {
   margin-top: 18px;
-}
-.percent-value {
-  width: 36px;
-  text-align: right;
-  font-weight: 700;
 }

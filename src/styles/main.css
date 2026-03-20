@@ -60,6 +60,7 @@ body {
   flex-direction: column;
   min-height: 100dvh;
   max-height: 100dvh;
+  overflow: hidden;
   max-width: 1200px;
   margin: 0 auto;
 }
