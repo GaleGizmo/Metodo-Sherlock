@@ -49,15 +49,13 @@ export default function ResultsSummaryModal({
           </div>
 
           {rows.map((r, i) => (
-            <div key={r.id} className="result-row">
+            <div key={r.id} className={`result-row ${r.correct ? "row-correct" : "row-wrong"}`}>
               <div className="result-left">{`CASO ${i + 1}`}</div>
               <div className="result-right">
-                <div className="col-value">{mapVoteLabel(r.vote)}</div>
-                <div
-                  className={`col-value result-badge-small ${
-                    r.truth ? "true" : "false"
-                  }`}
-                >
+                <div className={`col-value result-badge-small ${r.vote === "true" ? "true" : r.vote === "false" ? "false" : "doubt"}`}>
+                  {mapVoteLabel(r.vote)}
+                </div>
+                <div className={`col-value result-badge-small ${r.truth ? "true" : "false"}`}>
                   {r.truth ? "VERDADERA" : "FALSA"}
                 </div>
               </div>
@@ -65,9 +63,11 @@ export default function ResultsSummaryModal({
           ))}
         </div>
 
-        <div
-          style={{ marginTop: 14, fontWeight: 700 }}
-        >{`${username ? username.toUpperCase() + ": " : ""}HAS ACERTADO ${correctCount}/${total} (${pct}%)`}</div>
+        <div className="score-summary">
+          {username && <div className="score-username">{username}</div>}
+          <div className="score-fraction">{correctCount}<span>/{total}</span></div>
+          <div className="score-pct">{pct}%</div>
+        </div>
 
         <div className="avg-comparison">
           <div className="avg-block">

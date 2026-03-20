@@ -8,26 +8,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 10px;
+  padding: 6px 10px;
   border-bottom: 1px solid #eee;
+  border-left: 3px solid transparent;
+}
+.row-correct {
+  border-left-color: var(--true);
+  background: rgba(46, 125, 50, 0.04);
+}
+.row-wrong {
+  border-left-color: var(--false);
+  background: rgba(198, 40, 40, 0.04);
 }
 .result-left {
-  flex: 1 1 auto;
+  flex: 0 0 24%;
   font-weight: 700;
-  width: 24%;
+  font-size: 0.85rem;
 }
 .result-right {
-  width: 76%;
+  flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr;
-
+  gap: 6px;
   align-items: center;
-}
-.result-right .col-title {
-  font-size: 0.75rem;
-  color: var(--muted);
-  font-weight: 700;
-  text-align: right;
 }
 .result-right .col-value {
   font-weight: 800;
@@ -36,29 +39,23 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 8px 10px;
-
-  margin-bottom: 6px;
-  font-weight: 800;
-  border-bottom: 1px solid #665959;
-  color: var(--muted);
-  .era {
-    width: 38%;
-  }
-  .votaste {
-    width: 38%;
-  }
-  .caso {
-    width: 24%;
-  }
+  padding: 4px 10px 6px 13px;
+  font-weight: 700;
+  border-bottom: 2px solid #ddd;
+  color: #999;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
-.results-header .col-title {
-  text-align: left;
-}
+.results-header .caso { flex: 0 0 24%; }
+.results-header .votaste,
+.results-header .era { flex: 1; }
 
 .result-badge-small {
-  padding: 6px 8px;
+  display: inline-block;
+  padding: 3px 8px;
   border-radius: 6px;
+  font-size: 0.75rem;
   font-weight: 700;
   width: fit-content;
 }
@@ -70,9 +67,53 @@
   background: rgba(198, 40, 40, 0.12);
   color: var(--false);
 }
+.result-badge-small.doubt {
+  background: rgba(100, 100, 100, 0.1);
+  color: #666;
+}
+
+/* Score summary block */
+.score-summary {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--primary);
+  border-radius: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.score-username {
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.9;
+  flex: 1;
+}
+.score-fraction {
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+}
+.score-fraction span {
+  font-size: 1.8rem;
+  font-weight: 500;
+  opacity: 0.7;
+}
+.score-pct {
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
 @media (max-width: 600px) {
- 
   .results-list {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
+  }
+  .result-badge-small {
+    font-size: 0.68rem;
+    padding: 2px 6px;
   }
 }

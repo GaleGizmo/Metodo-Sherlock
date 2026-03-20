@@ -28,6 +28,7 @@ function GameApp() {
   const [idx, setIdx] = useState(0);
   const h = headlines[idx];
   const [resultsOpen, setResultsOpen] = useState(false);
+  const [resultsShown, setResultsShown] = useState(false);
   const [sessionAvg, setSessionAvg] = useState(null);
   const [globalAvg, setGlobalAvg] = useState(null);
   // dummy state to trigger re-render after votes are stored in sessionStorage
@@ -122,6 +123,7 @@ function GameApp() {
     const correctCount = rows.filter(Boolean).length;
     submitScoreToSupabase(correctCount, headlines.length);
     setResultsOpen(true);
+    setResultsShown(true);
     localStorage.setItem("results_shown", true);
   }
 
@@ -151,7 +153,7 @@ function GameApp() {
           headline={h}
           onVote={handleVote}
           storedVote={h ? getStored(h.id) : null}
-          resultsEnabled={localStorage.getItem("results_shown")==="true"}
+          resultsEnabled={resultsShown}
         />
       </main>
       <Footer

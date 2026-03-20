@@ -87,8 +87,8 @@
 @media (max-width: 600px) {
   .news-image {
     max-width: 100%;
-    max-height: calc(100vh - 320px);
     width: 100%;
+     max-height: calc(100vh - 220px);
   }
 }
 
