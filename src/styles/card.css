@@ -1,5 +1,6 @@
 /* Card, headline and image styles */
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -12,6 +13,58 @@
   flex: 1 1 auto;
   overflow: auto;
 }
+.card-nav {
+  display: none; /* hidden on desktop (pointer: fine) — shown only on touch below */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.35);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.card-nav:active {
+  background: rgba(0, 0, 0, 0.35); /* prevent darkening on tap */
+}
+.card-nav::before,
+.card-nav::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 2.5px;
+  background: #fff;
+  border-radius: 2px;
+  top: 50%;
+  margin-top: -1.25px;
+}
+.card-nav-next::before,
+.card-nav-next::after {
+  right: 13px;
+  transform-origin: right center;
+}
+.card-nav-next::before { transform: rotate(-50deg); }
+.card-nav-next::after  { transform: rotate( 50deg); }
+.card-nav-prev::before,
+.card-nav-prev::after {
+  left: 13px;
+  transform-origin: left center;
+}
+.card-nav-prev::before { transform: rotate( 50deg); }
+.card-nav-prev::after  { transform: rotate(-50deg); }
+.card-nav-prev { left:  6px; }
+.card-nav-next { right: 6px; }
+
+/* Only show chevrons on touch screens */
+@media (pointer: coarse) {
+  .card-nav { display: block; }
+}
+.card-nav-prev { left:  6px; }
+.card-nav-next { right: 6px; }
 .headline {
   font-size: 1.6rem;
   font-weight: 700;
